@@ -1,0 +1,17 @@
+:root {
+  --white: #fff;
+  --black: #333;
+  --black-darken: #222;
+  --black-darkest: #000;
+  --blue: #4A5CEF;
+  --fluorescent: #E0FB60;
+  --red: #FF0000;
+  --gray: #DEE2E6;
+  --gray-lighten: #F8F9FA;
+  
+  --kakao: #FEE500;
+  --naver: #06C755;
+
+  --primary: var(--blue);
+  --secondary: var(--fluorescent);
+}

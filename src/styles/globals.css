@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("@styles/reset.css");
+@import url("@styles/colors.css");
+@import url("@styles/fonts.css");
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
