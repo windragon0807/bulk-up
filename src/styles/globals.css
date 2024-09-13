@@ -7,7 +7,21 @@
 @import url("@styles/fonts.css");
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .centered-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .horizontal {
+    display: flex;
+    align-items: center;
+  }
+
+  .horizontal-center {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
