@@ -1,10 +1,9 @@
+import { IconType } from '@/types/icon'
+
 export default function ArrowLeftIcon({
   color = '#333333',
   size = 24,
-}: {
-  color?: string
-  size?: number
-}) {
+}: IconType) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <path

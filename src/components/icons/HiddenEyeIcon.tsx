@@ -1,4 +1,4 @@
-import { IconType } from '@types/icon'
+import { IconType } from '@/types/icon'
 
 export default function HiddenEyeIcon({
   size = 24,

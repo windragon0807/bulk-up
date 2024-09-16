@@ -1,4 +1,4 @@
-import { IconType } from '@types/icon'
+import { IconType } from '@/types/icon'
 
 export default function CloseIcon({ size = 24, color = '#333333' }: IconType) {
   return (
