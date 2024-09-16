@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+
 import '@styles/globals.css'
 
 export default function RootLayout({
@@ -15,10 +16,10 @@ export default function RootLayout({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | BulkUp',
-    default: 'BulkUp',
+    template: '%s | Bulk-Up',
+    default: 'Bulk-Up',
   },
-  description: "BulkUp, Let's bulk up together!",
+  description: "Bulk-Up, Let's bulk up together!",
   other: {
     /* Allow web app to be run in full-screen mode - iOS. */
     'apple-mobile-web-app-capable': 'yes',
