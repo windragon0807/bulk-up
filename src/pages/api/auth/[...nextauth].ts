@@ -1,6 +1,8 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
+import { checkUser } from '@remote/user'
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -17,6 +19,7 @@ export const authOptions: NextAuthOptions = {
       //   return false
       // }
       /** 여기에서 Firebase DB 계정 추가하는 작업 필요 */
+      checkUser({ email: props.user.email ?? '' })
       return true
     },
     // https://next-auth.js.org/configuration/callbacks#session-callback

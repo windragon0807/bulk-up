@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, MouseEvent, useCallback, useEffect } from 'react'
+import { useState, MouseEvent, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { signInWithEmailAndPassword } from 'firebase/auth'
