@@ -2,7 +2,11 @@
 
 import { ChangeEvent, useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import {
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+  updateProfile,
+} from 'firebase/auth'
 import { collection, doc, setDoc } from 'firebase/firestore'
 
 import { auth, store } from '@remote/firebase'
@@ -12,6 +16,7 @@ import LabeledInput from '@shared/LabeledInput'
 import EmailInput from '@shared/EmailInput'
 import FullSizeButton from '@shared/FullSizeButton'
 import { COLLECTIONS } from '@/constants'
+import { FirebaseError } from 'firebase/app'
 
 export default function Register() {
   const navigate = useRouter()
@@ -31,8 +36,18 @@ export default function Register() {
   }, [])
 
   const handleSubmit = async () => {
-    if (formValues.password !== formValues.passwordConfirm) {
-      alert('비밀번호가 일치하지 않습니다.')
+    if (formValues.name === '') {
+      alert('이름을 입력해주세요.')
+      return
+    }
+
+    if (formValues.email === '') {
+      alert('이메일을 입력해주세요.')
+      return
+    }
+
+    if (formValues.password === '') {
+      alert('비밀번호를 입력해주세요.')
       return
     }
 
@@ -41,25 +56,47 @@ export default function Register() {
       return
     }
 
-    const { user } = await createUserWithEmailAndPassword(
-      auth,
-      formValues.email,
-      formValues.password,
-    )
-
-    await updateProfile(user, {
-      displayName: formValues.name,
-    })
-
-    const newUser = {
-      uid: user.uid,
-      email: user.email,
-      displayName: formValues.name,
+    if (formValues.passwordConfirm === '') {
+      alert('비밀번호 확인을 입력해주세요.')
+      return
     }
 
-    await setDoc(doc(collection(store, COLLECTIONS.USER), user.uid), newUser)
+    if (formValues.password !== formValues.passwordConfirm) {
+      alert('비밀번호가 일치하지 않습니다.')
+      return
+    }
 
-    navigate.push('/')
+    try {
+      /* 이미 가입한 이메일이 있는지 검사 */
+      await fetchSignInMethodsForEmail(auth, formValues.email)
+
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        formValues.email,
+        formValues.password,
+      )
+
+      await updateProfile(user, {
+        displayName: formValues.name,
+      })
+
+      const newUser = {
+        uid: user.uid,
+        email: user.email,
+        displayName: formValues.name,
+      }
+
+      await setDoc(doc(collection(store, COLLECTIONS.USER), user.uid), newUser)
+
+      navigate.replace('/')
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        if (error.code === 'auth/email-already-in-use') {
+          alert('이미 가입된 이메일입니다.')
+          return
+        }
+      }
+    }
   }
 
   return (
