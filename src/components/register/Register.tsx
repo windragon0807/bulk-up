@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, MouseEvent, useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   createUserWithEmailAndPassword,
@@ -35,7 +35,9 @@ export default function Register() {
     }))
   }, [])
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
     if (formValues.name === '') {
       alert('이름을 입력해주세요.')
       return
@@ -100,7 +102,7 @@ export default function Register() {
   }
 
   return (
-    <section className="w-full flex flex-col items-center px-40">
+    <form className="w-full flex flex-col items-center px-40">
       <LabeledInput label="이름">
         <EmailInput
           name="name"
@@ -117,6 +119,7 @@ export default function Register() {
           value={formValues.email}
           onChange={handleChange}
           placeholder="이메일을 입력해주세요"
+          autoComplete="off"
         />
       </LabeledInput>
       <Spacing size={30} />
@@ -127,6 +130,7 @@ export default function Register() {
           value={formValues.password}
           onChange={handleChange}
           placeholder="4자리 이상 비밀번호를 입력해주세요"
+          autoComplete="new-password"
         />
       </LabeledInput>
       <Spacing size={30} />
@@ -142,6 +146,6 @@ export default function Register() {
       <Spacing size={40} />
 
       <FullSizeButton onClick={handleSubmit}>회원가입</FullSizeButton>
-    </section>
+    </form>
   )
 }

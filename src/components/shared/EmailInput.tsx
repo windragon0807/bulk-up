@@ -1,15 +1,17 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, HTMLInputAutoCompleteAttribute } from 'react'
 
 export default function EmailInput({
   className,
   name,
   placeholder,
+  autoComplete,
   value,
   onChange,
 }: {
   className?: HTMLInputElement['className']
   name?: HTMLInputElement['name']
   placeholder?: HTMLInputElement['placeholder']
+  autoComplete?: HTMLInputAutoCompleteAttribute
   value: HTMLInputElement['value']
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
 }) {
@@ -21,6 +23,7 @@ export default function EmailInput({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      autoComplete={autoComplete}
     />
   )
 }

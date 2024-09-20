@@ -1,11 +1,11 @@
-import { ReactNode } from 'react'
+import { MouseEvent, ReactNode } from 'react'
 
 export default function FullSizeButton({
   children,
   onClick,
 }: {
   children: ReactNode
-  onClick?: () => void
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void
 }) {
   return (
     <button
