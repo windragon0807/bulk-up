@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import AuthContext from '@contexts/AuthContext'
 import '@styles/globals.css'
 
 export default function RootLayout({
@@ -9,7 +10,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="font-pretendard">{children}</body>
+      <body className="font-pretendard">
+        <AuthContext>{children}</AuthContext>
+      </body>
     </html>
   )
 }

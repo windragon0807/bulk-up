@@ -1,11 +1,17 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { getProviders } from 'next-auth/react'
 
 import Layout from '@shared/Layout'
 import Flex from '@shared/Flex'
 import Spacing from '@shared/Spacing'
+import OAuthLogin from '@/components/sigin/OAuthLogin'
+import SignOutButton from '@/components/shared/SignOutButton'
 
-export default function SigninPage() {
+export default async function SigninPage() {
+  const providers = await getProviders()
+  console.log('ryong', providers)
+
   return (
     <Layout className="bg-white-comportable">
       <div className="w-full h-[70%] centered-content gap-20">
@@ -13,9 +19,15 @@ export default function SigninPage() {
         <p className="text-black text-2xl font-bold tracking-[5px]">BULKUP</p>
       </div>
       <Flex className="w-full gap-30" justify="center">
-        <OAtuhLogo iconName="naver" className="bg-naver" />
+        <SignOutButton>
+          <OAtuhLogo iconName="naver" className="bg-naver" />
+        </SignOutButton>
         <OAtuhLogo iconName="kakao" className="bg-kakao" />
-        <OAtuhLogo iconName="google" className="border-gray-300 bg-white" />
+        {providers?.google != null ? (
+          <OAuthLogin provider={providers.google}>
+            <OAtuhLogo iconName="google" className="border-gray-300 bg-white" />
+          </OAuthLogin>
+        ) : null}
       </Flex>
       <Spacing size={30} />
       <Link href="/signin/email">
