@@ -12,10 +12,10 @@ export default async function SigninPage() {
   return (
     <Layout className="bg-white-comportable">
       <div className="w-full h-[70%] centered-content gap-20">
+        <Image src="/icons/logo.png" alt="" width={80} height={80} priority />
         <SignOutButton>
-          <Image src="/icons/logo.png" alt="" width={80} height={80} priority />
+          <p className="text-black text-2xl font-bold tracking-[5px]">BULKUP</p>
         </SignOutButton>
-        <p className="text-black text-2xl font-bold tracking-[5px]">BULKUP</p>
       </div>
       <Flex className="w-full gap-30" justify="center">
         <OAuthLoginButton provider="naver">

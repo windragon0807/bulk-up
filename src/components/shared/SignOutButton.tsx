@@ -10,5 +10,9 @@ export default function SignOutButton({ children }: { children: ReactNode }) {
     return children
   }
 
-  return <button onClick={() => signOut()}>{children}</button>
+  return (
+    <button style={{ border: '1px solid gray' }} onClick={() => signOut()}>
+      {children}
+    </button>
+  )
 }

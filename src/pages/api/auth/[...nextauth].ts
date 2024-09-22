@@ -1,23 +1,62 @@
-import NextAuth, { NextAuthOptions } from 'next-auth'
-import NaverProvider from 'next-auth/providers/naver'
-import KakaoProvider from 'next-auth/providers/kakao'
-import GoogleProvider from 'next-auth/providers/google'
+import NextAuth, { Awaitable, NextAuthOptions } from 'next-auth'
+import Naver from 'next-auth/providers/naver'
+import Kakao from 'next-auth/providers/kakao'
+import Google from 'next-auth/providers/google'
+import Credentials from 'next-auth/providers/credentials'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { FirebaseError } from 'firebase/app'
 
+import { auth } from '@remote/firebase'
 import { checkUser } from '@remote/user'
+import { redirect } from 'next/navigation'
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    NaverProvider({
+    Naver({
       clientId: process.env.NAVER_OAUTH_ID || '',
       clientSecret: process.env.NAVER_OAUTH_SECRET || '',
     }),
-    KakaoProvider({
+    Kakao({
       clientId: process.env.KAKAO_OAUTH_ID || '',
       clientSecret: process.env.KAKAO_OAUTH_SECRET || '',
     }),
-    GoogleProvider({
+    Google({
       clientId: process.env.GOOGLE_OAUTH_ID || '',
       clientSecret: process.env.GOOGLE_OAUTH_SECRET || '',
+    }),
+    Credentials({
+      name: 'firebase-email',
+      credentials: {
+        email: { label: 'email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize(credentials): Promise<any> {
+        if (!credentials || !credentials.email || !credentials.password)
+          return null
+
+        try {
+          // Firebase 로그인
+          const user = await signInWithEmailAndPassword(
+            auth,
+            credentials.email,
+            credentials.password,
+          )
+
+          if (user) {
+            return user
+          }
+
+          return null
+        } catch (e) {
+          // Firebase 에러
+          if (e instanceof FirebaseError) {
+            if (e.code === 'auth/invalid-credential') {
+              alert('가입되지 않은 이메일이거나, 비밀번호가 틀렸습니다.')
+              return null
+            }
+          }
+        }
+      },
     }),
   ],
   callbacks: {

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
+import { signIn } from 'next-auth/react'
 
 import { auth } from '@remote/firebase'
 import Spacing from '@shared/Spacing'
@@ -37,20 +38,11 @@ export default function Login() {
         return
       }
 
-      try {
-        // Firebase 로그인
-        await signInWithEmailAndPassword(auth, email, password)
-
-        router.push('/')
-      } catch (e) {
-        // Firebase 에러
-        if (e instanceof FirebaseError) {
-          if (e.code === 'auth/invalid-credential') {
-            alert('가입되지 않은 이메일이거나, 비밀번호가 틀렸습니다.')
-            return
-          }
-        }
-      }
+      await signIn('credentials', {
+        email,
+        password,
+      })
+      router.push('/')
     },
     [email, password], // eslint-disable-line react-hooks/exhaustive-deps
   )
