@@ -6,6 +6,4 @@ export async function checkUser({ email }: { email: string }) {
   const snapshot = await getDocs(
     query(collection(store, COLLECTIONS.USER), where('email', '==', email)),
   )
-
-  console.log('ryong2', snapshot)
 }

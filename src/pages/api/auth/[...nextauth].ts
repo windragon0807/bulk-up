@@ -1,10 +1,20 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
+import NaverProvider from 'next-auth/providers/naver'
+import KakaoProvider from 'next-auth/providers/kakao'
 import GoogleProvider from 'next-auth/providers/google'
 
 import { checkUser } from '@remote/user'
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    NaverProvider({
+      clientId: process.env.NAVER_OAUTH_ID || '',
+      clientSecret: process.env.NAVER_OAUTH_SECRET || '',
+    }),
+    KakaoProvider({
+      clientId: process.env.KAKAO_OAUTH_ID || '',
+      clientSecret: process.env.KAKAO_OAUTH_SECRET || '',
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_OAUTH_ID || '',
       clientSecret: process.env.GOOGLE_OAUTH_SECRET || '',
@@ -14,12 +24,12 @@ export const authOptions: NextAuthOptions = {
     /* 실행 순서: signIn -> jwt -> session */
     // { user: { id, name, image, email } }
     async signIn(props) {
-      console.log('ryong', props)
       // if (!email) {
       //   return false
       // }
+      console.log('ryong', props)
       /** 여기에서 Firebase DB 계정 추가하는 작업 필요 */
-      checkUser({ email: props.user.email ?? '' })
+      // checkUser({ email: props.user.email ?? '' })
       return true
     },
     // https://next-auth.js.org/configuration/callbacks#session-callback

@@ -5,29 +5,28 @@ import { getProviders } from 'next-auth/react'
 import Layout from '@shared/Layout'
 import Flex from '@shared/Flex'
 import Spacing from '@shared/Spacing'
-import OAuthLogin from '@/components/sigin/OAuthLogin'
-import SignOutButton from '@/components/shared/SignOutButton'
+import SignOutButton from '@shared/SignOutButton'
+import OAuthLoginButton from '@components/sigin/OAuthLoginButton'
 
 export default async function SigninPage() {
-  const providers = await getProviders()
-  console.log('ryong', providers)
-
   return (
     <Layout className="bg-white-comportable">
       <div className="w-full h-[70%] centered-content gap-20">
-        <Image src="/icons/logo.png" alt="" width={80} height={80} priority />
+        <SignOutButton>
+          <Image src="/icons/logo.png" alt="" width={80} height={80} priority />
+        </SignOutButton>
         <p className="text-black text-2xl font-bold tracking-[5px]">BULKUP</p>
       </div>
       <Flex className="w-full gap-30" justify="center">
-        <SignOutButton>
+        <OAuthLoginButton provider="naver">
           <OAtuhLogo iconName="naver" className="bg-naver" />
-        </SignOutButton>
-        <OAtuhLogo iconName="kakao" className="bg-kakao" />
-        {providers?.google != null ? (
-          <OAuthLogin provider={providers.google}>
-            <OAtuhLogo iconName="google" className="border-gray-300 bg-white" />
-          </OAuthLogin>
-        ) : null}
+        </OAuthLoginButton>
+        <OAuthLoginButton provider="kakao">
+          <OAtuhLogo iconName="kakao" className="bg-kakao" />
+        </OAuthLoginButton>
+        <OAuthLoginButton provider="google">
+          <OAtuhLogo iconName="google" className="border-gray-300 bg-white" />
+        </OAuthLoginButton>
       </Flex>
       <Spacing size={30} />
       <Link href="/signin/email">

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import AuthContext from '@contexts/AuthContext'
+import ReactQuery from '@contexts/ReactQuery'
 import '@styles/globals.css'
 
 export default function RootLayout({
@@ -11,7 +12,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="font-pretendard">
-        <AuthContext>{children}</AuthContext>
+        <AuthContext>
+          <ReactQuery>{children}</ReactQuery>
+        </AuthContext>
       </body>
     </html>
   )
