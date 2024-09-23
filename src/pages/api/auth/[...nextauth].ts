@@ -1,4 +1,4 @@
-import NextAuth, { Awaitable, NextAuthOptions } from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import Naver from 'next-auth/providers/naver'
 import Kakao from 'next-auth/providers/kakao'
 import Google from 'next-auth/providers/google'
@@ -8,7 +8,6 @@ import { FirebaseError } from 'firebase/app'
 
 import { auth } from '@remote/firebase'
 import { checkUser } from '@remote/user'
-import { redirect } from 'next/navigation'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -27,15 +26,15 @@ export const authOptions: NextAuthOptions = {
     Credentials({
       name: 'firebase-email',
       credentials: {
-        email: { label: 'email', type: 'text' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: 'email', type: 'email' },
+        password: { label: 'password', type: 'password' },
       },
-      async authorize(credentials): Promise<any> {
+      async authorize(credentials) {
         if (!credentials || !credentials.email || !credentials.password)
           return null
 
         try {
-          // Firebase 로그인
+          /* Firebase 이메일, 패스워드 로그인 */
           const user = await signInWithEmailAndPassword(
             auth,
             credentials.email,
@@ -43,30 +42,35 @@ export const authOptions: NextAuthOptions = {
           )
 
           if (user) {
-            return user
+            return {
+              id: user.user.uid,
+              name: user.user.displayName,
+              email: user.user.email,
+              image: user.user.photoURL,
+            }
           }
 
           return null
-        } catch (e) {
-          // Firebase 에러
-          if (e instanceof FirebaseError) {
-            if (e.code === 'auth/invalid-credential') {
-              alert('가입되지 않은 이메일이거나, 비밀번호가 틀렸습니다.')
-              return null
+        } catch (error) {
+          if (error instanceof FirebaseError) {
+            if (error.code === 'auth/invalid-credential') {
+              console.log(error)
             }
           }
         }
+
+        return null
       },
     }),
   ],
   callbacks: {
-    /* 실행 순서: signIn -> jwt -> session */
+    /* 라이프 사이클: signIn -> jwt -> session */
     // { user: { id, name, image, email } }
     async signIn(props) {
       // if (!email) {
       //   return false
       // }
-      console.log('ryong', props)
+      console.log('ryong2', props)
       /** 여기에서 Firebase DB 계정 추가하는 작업 필요 */
       // checkUser({ email: props.user.email ?? '' })
       return true
@@ -105,7 +109,7 @@ export const authOptions: NextAuthOptions = {
   },
   // https://next-auth.js.org/configuration/pages
   pages: {
-    signIn: '/signin',
+    signIn: '/',
   },
 }
 

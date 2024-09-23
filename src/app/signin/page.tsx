@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { getProviders } from 'next-auth/react'
 
 import Layout from '@shared/Layout'
 import Flex from '@shared/Flex'

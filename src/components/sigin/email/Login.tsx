@@ -1,13 +1,10 @@
 'use client'
 
 import { useState, MouseEvent, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { FirebaseError } from 'firebase/app'
+import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 
-import { auth } from '@remote/firebase'
 import Spacing from '@shared/Spacing'
 import PasswordInput from '@shared/PasswordInput'
 import LabeledInput from '@shared/LabeledInput'
@@ -16,6 +13,7 @@ import FullSizeButton from '@shared/FullSizeButton'
 
 export default function Login() {
   const router = useRouter()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -38,11 +36,23 @@ export default function Login() {
         return
       }
 
-      await signIn('credentials', {
+      const status = await signIn('credentials', {
         email,
         password,
+        callbackUrl: '/',
+        redirect: false,
       })
-      router.push('/')
+
+      if (status == null) return
+
+      // 로그인 성공
+      if (status.ok) {
+        router.push('/')
+        return
+      }
+
+      // 로그인 실패
+      alert('이메일 또는 비밀번호가 올바르지 않습니다.')
     },
     [email, password], // eslint-disable-line react-hooks/exhaustive-deps
   )
