@@ -66,9 +66,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     /* 라이프 사이클: signIn -> jwt -> session */
     async signIn(props) {
-      console.log(props)
+      console.log('SignIn Info', props)
 
-      addUserIfNotExist({
+      await addUserIfNotExist({
         provider: props.account?.provider ?? '',
         uid: props.user.id,
         email: props.user.email ?? '',

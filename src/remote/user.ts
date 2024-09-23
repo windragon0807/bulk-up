@@ -8,7 +8,7 @@ import {
 } from 'firebase/firestore'
 
 import { User } from '@models/user'
-import { COLLECTIONS } from '@/constants'
+import { COLLECTIONS } from '@constants/index'
 import { store } from './firebase'
 
 export async function addUserIfNotExist(user: User) {

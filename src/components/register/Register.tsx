@@ -7,15 +7,13 @@ import {
   fetchSignInMethodsForEmail,
   updateProfile,
 } from 'firebase/auth'
-import { collection, doc, setDoc } from 'firebase/firestore'
 
-import { auth, store } from '@remote/firebase'
+import { auth } from '@remote/firebase'
 import Spacing from '@shared/Spacing'
 import PasswordInput from '@shared/PasswordInput'
 import LabeledInput from '@shared/LabeledInput'
 import EmailInput from '@shared/EmailInput'
 import FullSizeButton from '@shared/FullSizeButton'
-import { COLLECTIONS } from '@/constants'
 import { FirebaseError } from 'firebase/app'
 import { addUser } from '@remote/user'
 
