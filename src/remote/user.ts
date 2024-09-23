@@ -1,9 +1,26 @@
-import { collection, getDocs, query, where } from 'firebase/firestore'
-import { store } from './firebase'
-import { COLLECTIONS } from '@/constants'
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore'
 
-export async function checkUser({ email }: { email: string }) {
+import { User } from '@models/user'
+import { COLLECTIONS } from '@/constants'
+import { store } from './firebase'
+
+export async function addUserIfNotExist(user: User) {
   const snapshot = await getDocs(
-    query(collection(store, COLLECTIONS.USER), where('email', '==', email)),
+    query(collection(store, COLLECTIONS.USER), where('uid', '==', user.uid)),
   )
+
+  if (snapshot.size === 0) {
+    await addUser(user)
+  }
+}
+
+export async function addUser(user: User) {
+  setDoc(doc(collection(store, COLLECTIONS.USER), user.uid), user)
 }

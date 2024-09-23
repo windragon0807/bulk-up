@@ -7,7 +7,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
 
 import { auth } from '@remote/firebase'
-import { checkUser } from '@remote/user'
+import { addUserIfNotExist } from '@remote/user'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -65,49 +65,19 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     /* 라이프 사이클: signIn -> jwt -> session */
-    // { user: { id, name, image, email } }
     async signIn(props) {
-      // if (!email) {
-      //   return false
-      // }
-      console.log('ryong2', props)
-      /** 여기에서 Firebase DB 계정 추가하는 작업 필요 */
-      // checkUser({ email: props.user.email ?? '' })
+      console.log(props)
+
+      addUserIfNotExist({
+        provider: props.account?.provider ?? '',
+        uid: props.user.id,
+        email: props.user.email ?? '',
+        displayName: props.user.name ?? '',
+      })
+
       return true
     },
-    // https://next-auth.js.org/configuration/callbacks#session-callback
-    // async session({ session, token }) {
-    //   /**
-    //    * console.log(session);
-    //    * {
-    //    *   user: {
-    //    *     name: '이름',
-    //    *     email: '이메일',
-    //    *     image: '이미지',
-    //    *   },
-    //    *   expires: '만료일',
-    //    * }
-    //    */
-    //   const user = session?.user;
-    //   if (user) {
-    //     // 세션 정보 커스텀 : https://next-auth.js.org/getting-started/typescript
-    //     session.user = {
-    //       ...user,
-    //       username: user.email?.split('@')[0] || '',
-    //       id: token.id as string,
-    //     };
-    //   }
-    //   return session;
-    // },
-    // // https://next-auth.js.org/configuration/callbacks#jwt-callback
-    // async jwt({ token, user }) {
-    //   if (user) {
-    //     token.id = user.id;
-    //   }
-    //   return token;
-    // },
   },
-  // https://next-auth.js.org/configuration/pages
   pages: {
     signIn: '/',
   },

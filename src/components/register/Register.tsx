@@ -17,6 +17,7 @@ import EmailInput from '@shared/EmailInput'
 import FullSizeButton from '@shared/FullSizeButton'
 import { COLLECTIONS } from '@/constants'
 import { FirebaseError } from 'firebase/app'
+import { addUser } from '@remote/user'
 
 export default function Register() {
   const navigate = useRouter()
@@ -82,13 +83,12 @@ export default function Register() {
         displayName: formValues.name,
       })
 
-      const newUser = {
+      await addUser({
+        provider: 'email',
         uid: user.uid,
-        email: user.email,
+        email: user.email || '',
         displayName: formValues.name,
-      }
-
-      await setDoc(doc(collection(store, COLLECTIONS.USER), user.uid), newUser)
+      })
 
       navigate.replace('/')
     } catch (error) {
