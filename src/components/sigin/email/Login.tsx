@@ -10,6 +10,7 @@ import PasswordInput from '@shared/PasswordInput'
 import LabeledInput from '@shared/LabeledInput'
 import EmailInput from '@shared/EmailInput'
 import FullSizeButton from '@shared/FullSizeButton'
+import { LOCALSTORAGE } from '@constants/localStorage'
 
 export default function Login() {
   const router = useRouter()
@@ -47,6 +48,7 @@ export default function Login() {
 
       // 로그인 성공
       if (status.ok) {
+        localStorage.setItem(LOCALSTORAGE.OAUTH_PROVIDER, '')
         router.push('/')
         return
       }
